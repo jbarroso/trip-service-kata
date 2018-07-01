@@ -2,8 +2,7 @@
     "name": "sandromancuso/trip-service-kata",
     "description": "Kata for a legacy code hands-on session. The objective is to write tests and refactor the given legacy code.",
     "require-dev": {
-        "php": "^7.0",
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "5.*"
     },
     "scripts": {
         "test": "phpunit"
@@ -19,8 +18,9 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": {
-            "": ["src/"]
+        "psr-4": {
+            "": "src",
+            "Test\\": "test/Test"
         }
     }
 }
