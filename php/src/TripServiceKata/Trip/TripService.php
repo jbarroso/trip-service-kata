@@ -10,9 +10,7 @@ class TripService
 {
     public function getTripsByUser(User $user) {
         $loggedUser = $this->getLoggedUser();
-        if ($loggedUser === null) {
-            throw new UserNotLoggedInException();
-        }
+        $this->validateLoggedUser($loggedUser);
 
         return $user->isFriendOf($loggedUser) ?
             $this->findTripsByUser($user) : [];
@@ -23,8 +21,16 @@ class TripService
         return UserSession::getInstance()->getLoggedUser();
     }
 
+    private function validateLoggedUser($loggedUser)
+    {
+        if ($loggedUser === null) {
+            throw new UserNotLoggedInException();
+        }
+    }
+
     protected function findTripsByUser(User $user)
     {
         return TripDAO::findTripsByUser($user);
     }
+
 }
