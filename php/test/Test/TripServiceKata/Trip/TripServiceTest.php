@@ -54,11 +54,16 @@ class TripServiceTest extends TestCase
 
     private function getTripsByUser()
     {
+        $tripService = new TestableTripService($this->getUserSessionMock());
+        return $tripService->getTripsByUser($this->user);
+    }
+
+    private function getUserSessionMock()
+    {
         $userSession = $this->createMock(UserSession::class);
         $userSession->expects($this->once())
             ->method('getLoggedUser')
             ->willReturn($this->loggedUser);
-        $tripService = new TestableTripService($userSession);
-        return $tripService->getTripsByUser($this->user);
+        return $userSession;
     }
 }
