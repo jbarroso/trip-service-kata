@@ -56,9 +56,14 @@ class TripServiceTest extends TestCase
 
     private function getTripsByUser()
     {
-        $tripService = new TripService(
-            $this->getUserSessionMock(), $this->getTripDAOMock());
+        $tripService = $this->getTripService();
         return $tripService->getTripsByUser($this->user);
+    }
+
+    private function getTripService()
+    {
+        return new TripService(
+            $this->getUserSessionMock(), $this->getTripDAOMock());
     }
 
     private function getUserSessionMock()
