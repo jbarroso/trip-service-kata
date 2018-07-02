@@ -4,6 +4,7 @@ namespace Test\TripServiceKata\Trip;
 
 use PHPUnit\Framework\TestCase;
 use TripServiceKata\User\User;
+use TripServiceKata\User\UserSession;
 use TripServiceKata\Trip\Trip;
 use TripServiceKata\Exception\UserNotLoggedInException;
 
@@ -53,7 +54,11 @@ class TripServiceTest extends TestCase
 
     private function getTripsByUser()
     {
-        $tripService = new TestableTripService($this->loggedUser);
+        $userSession = $this->createMock(UserSession::class);
+        $userSession->expects($this->once())
+            ->method('getLoggedUser')
+            ->willReturn($this->loggedUser);
+        $tripService = new TestableTripService($userSession);
         return $tripService->getTripsByUser($this->user);
     }
 }

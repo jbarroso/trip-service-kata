@@ -13,18 +13,6 @@ use TripServiceKata\User\User;
 class TestableTripService extends TripService
 {
 
-    private $loggedUser;
-
-    function __construct($loggedUser)
-    {
-        $this->loggedUser = $loggedUser;
-    }
-
-    protected function getLoggedUser()
-    {
-        return $this->loggedUser;
-    }
-
     protected function findTripsByUser(User $user)
     {
         return $user->getTrips();

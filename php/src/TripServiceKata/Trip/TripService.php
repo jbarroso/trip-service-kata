@@ -8,6 +8,16 @@ use TripServiceKata\Exception\UserNotLoggedInException;
 
 class TripService
 {
+    /**
+     * @var UserSession
+     */
+    private $userSession;
+
+    function __construct(UserSession $userSession)
+    {
+        $this->userSession = $userSession;
+    }
+
     public function getTripsByUser(User $user) {
         $loggedUser = $this->getLoggedUser();
         $this->validateLoggedUser($loggedUser);
@@ -16,9 +26,9 @@ class TripService
             $this->findTripsByUser($user) : [];
     }
 
-    protected function getLoggedUser()
+    private function getLoggedUser()
     {
-        return UserSession::getInstance()->getLoggedUser();
+        return $this->userSession->getLoggedUser();
     }
 
     private function validateLoggedUser($loggedUser)
