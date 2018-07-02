@@ -12,7 +12,7 @@ class TripService
         $tripList = array();
         $loggedUser = $this->getLoggedUser();
         if ($loggedUser != null) {
-            if ($user->isFriend($loggedUser)) {
+            if ($user->isFriendOf($loggedUser)) {
                 $tripList = $this->findTripsByUser($user);
             }
             return $tripList;
