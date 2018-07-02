@@ -3,6 +3,7 @@
 namespace Test\TripServiceKata\Trip;
 
 use TripServiceKata\Trip\TripService;
+use TripServiceKata\User\User;
 
 /**
  * Description of TestableTripService
@@ -22,5 +23,10 @@ class TestableTripService extends TripService
     protected function getLoggedUser()
     {
         return $this->loggedUser;
+    }
+
+    protected function findTripsByUser(User $user)
+    {
+        return $user->getTrips();
     }
 }
