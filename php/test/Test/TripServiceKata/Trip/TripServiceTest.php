@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 use TripServiceKata\User\User;
 use TripServiceKata\User\UserSession;
 use TripServiceKata\Trip\Trip;
+use TripServiceKata\Trip\TripDAO;
+use TripServiceKata\Trip\TripService;
 use TripServiceKata\Exception\UserNotLoggedInException;
 
 class TripServiceTest extends TestCase
@@ -54,7 +56,8 @@ class TripServiceTest extends TestCase
 
     private function getTripsByUser()
     {
-        $tripService = new TestableTripService($this->getUserSessionMock());
+        $tripService = new TripService(
+            $this->getUserSessionMock(), $this->getTripDAOMock());
         return $tripService->getTripsByUser($this->user);
     }
 
@@ -65,5 +68,15 @@ class TripServiceTest extends TestCase
             ->method('getLoggedUser')
             ->willReturn($this->loggedUser);
         return $userSession;
+    }
+
+    private function getTripDAOMock()
+    {
+        $tripDAO = $this->createMock(TripDAO::class);
+        $tripDAO->expects($this->any())
+            ->method('findTripsBy')
+            ->with($this->equalTo($this->user))
+            ->willReturn($this->user->getTrips());
+        return $tripDAO;
     }
 }
