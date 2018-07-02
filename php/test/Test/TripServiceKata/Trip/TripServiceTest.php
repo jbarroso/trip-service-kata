@@ -10,40 +10,50 @@ use TripServiceKata\Exception\UserNotLoggedInException;
 class TripServiceTest extends TestCase
 {
 
+    /**
+     * @var User
+     */
+    private $loggedUser;
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->loggedUser = new User('loggedUserName');
+        $this->user = new User('myUserName');
+    }
+
     public function testShouldThrowUserNotLoggedInException()
     {
         $this->expectException(UserNotLoggedInException::class);
 
-        $loggedUser = null;
-        $tripService = new TestableTripService($loggedUser);
+        $this->loggedUser = null;
 
-        $user = new User('myUserName');
-        $tripService->getTripsByUser($user);
+        $this->getTripsByUser();
     }
 
     public function testShouldReturnAnEmptyTripListWhenUsersAreNotFriends()
     {
-        $loggedUser = new User('loggedUserName');
-        $tripService = new TestableTripService($loggedUser);
-
-        $user = new User('myUserName');
-        $trips = $tripService->getTripsByUser($user);
-
-        $this->assertEquals([], $trips);
+        $this->assertEquals([], $this->getTripsByUser());
     }
 
     public function testShouldReturnATripListWhenUsersAreFriends()
     {
-        $loggedUser = new User('loggedUserName');
-        $tripService = new TestableTripService($loggedUser);
-
-        $user = new User('myUserName');
-        $user->addFriend($loggedUser);
+        $this->user->addFriend($this->loggedUser);
         $trip = new Trip();
-        $user->addTrip($trip);
+        $this->user->addTrip($trip);
 
-        $trips = $tripService->getTripsByUser($user);
+        $this->assertEquals([$trip], $this->getTripsByUser());
+    }
 
-        $this->assertEquals([$trip], $trips);
+    private function getTripsByUser()
+    {
+        $tripService = new TestableTripService($this->loggedUser);
+        return $tripService->getTripsByUser($this->user);
     }
 }
